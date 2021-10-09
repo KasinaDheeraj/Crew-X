@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="320dp"
+    card_view:cardCornerRadius="16dp"
+    android:elevation="4dp"
+    android:layout_margin="8dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/img"
+            android:layout_width="match_parent"
+            android:layout_height="320dp"
+            android:scaleType="matrix"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"/>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/gradient_transparent"/>
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFFFF"
+            android:layout_above="@+id/agency"
+            android:paddingLeft="8dp"
+            android:paddingBottom="6dp"
+            android:textSize="18sp"
+            android:text="NAME  : "
+            android:layout_alignParentLeft="true"/>
+        <TextView
+            android:id="@+id/agency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:layout_toLeftOf="@+id/status"
+            android:textSize="18sp"
+            android:paddingLeft="8dp"
+            android:paddingBottom="8dp"
+            android:textColor="#FFFFFF"
+            android:text="Agency :" />
+        <TextView
+            android:id="@+id/status"
+            android:textColor="#FFFFFF"
+            android:padding="6dp"
+            android:text="Status:Active a"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>
