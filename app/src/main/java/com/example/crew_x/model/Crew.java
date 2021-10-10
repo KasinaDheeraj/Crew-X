@@ -10,6 +10,7 @@ public class Crew {
     @SerializedName("wikipedia")
     private String wikiLink;
     private String status;
+    private String id;
 
     public String getName() {
         return name;
@@ -22,6 +23,8 @@ public class Crew {
     public String getImageUrl() {
         return imageUrl;
     }
+
+    public String getId() {return id;}
 
     public String getWikiLink() {
         return wikiLink;

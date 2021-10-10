@@ -1,16 +1,20 @@
 package com.example.crew_x;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.crew_x.adapter.RVAdapter;
 import com.example.crew_x.api.APIClient;
-import com.example.crew_x.api.CREWAPI;
+import com.example.crew_x.data.AppDatabase;
+import com.example.crew_x.data.CrewMembers;
 import com.example.crew_x.model.Crew;
 
 import java.util.ArrayList;
@@ -24,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +36,10 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView=findViewById(R.id.rv);
 
+        setUpRecyclerView();
+    }
 
+    public void setUpRecyclerView(){
         Call<List<Crew>> call= APIClient.getClient().getCrewList();
         call.enqueue(new Callback<List<Crew>>() {
             @Override
@@ -46,18 +54,18 @@ public class MainActivity extends AppCompatActivity {
                 ArrayList<String> status=new ArrayList<>();
                 ArrayList<String> imgLink=new ArrayList<>();
                 ArrayList<String> link=new ArrayList<>();
+                AppDatabase db=AppDatabase.getDbInsatance(MainActivity.this.getApplicationContext());
+
                 for(Crew l:list){
-//                    String s=""+l.getName()+l.getAgency()+l.getStatus()+l.getImageUrl()+l.getWikiLink();
-//                    Log.e("CREW",s);
-                    name.add(l.getName());
-                    agency.add(l.getAgency());
-                    status.add(l.getStatus());
-                    imgLink.add(l.getImageUrl());
-                    link.add(l.getWikiLink());
+                    CrewMembers cm=new CrewMembers();
+                    cm.name=l.getName();
+                    cm.agency=l.getAgency();
+                    cm.status=l.getStatus();
+                    cm.imgurl=l.getImageUrl();
+                    cm.wikiurl=l.getWikiLink();
+                    cm.memid=l.getId();
+                    db.appDao().insertMember(cm);
                 }
-                LinearLayoutManager lm= new LinearLayoutManager(MainActivity.this);
-                recyclerView.setLayoutManager(lm);
-                recyclerView.setAdapter(new RVAdapter(name,agency,status,imgLink,link));
             }
 
             @Override
@@ -66,5 +74,26 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this,t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+        LinearLayoutManager lm= new LinearLayoutManager(MainActivity.this);
+        recyclerView.setLayoutManager(lm);
+        recyclerView.setAdapter(new RVAdapter(MainActivity.this));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_item,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        if(item.getItemId()==R.id.refreshOption){
+            setUpRecyclerView();
+        }else if(item.getItemId()==R.id.delete){
+            AppDatabase db=AppDatabase.getDbInsatance(MainActivity.this.getApplicationContext());
+            db.appDao().deleteAll();
+        }
+        return true;
     }
 }
